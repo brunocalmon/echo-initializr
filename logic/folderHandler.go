@@ -5,23 +5,16 @@ import (
 	"os"
 
 	"github.com/brunocalmon/echo-initializr/data"
-	"github.com/brunocalmon/echo-initializr/global"
 )
 
-func CreateFolders() {
-	files, ok := global.Global["files"].(data.Files)
-	if ok {
-		for _, file := range files {
-			createFolder(file)
-		}
-	} else {
-		fmt.Println("Could not access or convert sample files interface!")
-		panic("stopped")
+func CreateFolders(outputDir string, files data.Files) {
+	for _, file := range files {
+		createFolder(outputDir, file)
 	}
 }
 
-func createFolder(file data.File) error {
-	path := file.Path()
+func createFolder(outputDir string, file data.File) error {
+	path := file.Path(outputDir)
 	err := os.MkdirAll(path, os.ModePerm)
 	if err != nil {
 		fmt.Printf("Could not create the directory %v\n", err)

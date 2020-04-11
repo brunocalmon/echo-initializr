@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/brunocalmon/echo-initializr/data"
-	"github.com/brunocalmon/echo-initializr/global"
 	"github.com/brunocalmon/echo-initializr/logic"
 	"github.com/spf13/cobra"
 )
@@ -23,15 +22,11 @@ var initCmd = &cobra.Command{
 		outputDir, _ := cmd.Flags().GetString("outputDir")
 		dependencies, _ := cmd.Flags().GetString("dependencies")
 		port, _ := cmd.Flags().GetInt("port")
+		files := data.Initializr(namespace)
 
-		global.Global["namespace"] = namespace
-		global.Global["version"] = version
-		global.Global["outputDir"] = outputDir
-		global.Global["port"] = port
-		global.Global["files"] = data.Initializr()
-
-		createProjectStructure()
-		installAllDependencies(outputDir, namespace, dependencies)
+		logic.CreateFolders(outputDir, files)
+		logic.CreateFiles(namespace, version, outputDir, port, files)
+		installAllDependencies(namespace, outputDir, dependencies)
 
 		fmt.Println("New project successfuly created at: " + outputDir + "/" + namespace)
 	},
@@ -51,12 +46,7 @@ func init() {
 	initCmd.Flags().IntP("port", "p", 8080, "Set the port of your project webserver.")
 }
 
-func createProjectStructure() {
-	logic.CreateFolders()
-	logic.CreateFiles()
-}
-
-func installAllDependencies(outputDir, namespace string, dependencies string) {
+func installAllDependencies(namespace, outputDir string, dependencies string) {
 	installDependence(outputDir+"/"+namespace, "github.com/labstack/echo/v4")
 
 	if dependencies != "" {
