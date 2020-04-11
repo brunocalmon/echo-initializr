@@ -1,6 +1,6 @@
 # echo-initializr
 
-This tool was created to help developers create webservices in a faster way, withou needing to lose time with basic configurations.
+Echo Initializr is a tool created to help developers start projects created in the Echo Framework more quickly, without having to waste time with basic configurations.
 
 ## Usage
 
