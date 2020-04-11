@@ -37,3 +37,32 @@ This tool was created to help developers create webservices in a faster way, wit
 ```
 go run main.go init --namespace "github.com/example/sample" -d "github.com/gorilla/mux,github.com/google/uuid" -p 8080
 ```
+
+## Tips:
+### RUN
+Inside the root of this project:
+```
+go build
+```
+A executable named "echo-initializr" will be generated.
+
+Place this executable where you prefer, for example:
+```
+mv echo-initializr $HOME/go/bin
+```
+Now you can just set this in you PATH as variable to use directly in you terminal.
+
+Open the .bash_profile 
+```
+vim $HOME/.bash_profile
+```
+Write this lines: (Assuming that you have placed the executable file in the same folder as me)
+```
+export ECHOINITIALZR=$HOME/go/bin
+export PATH=$PATH:$ECHOINITIALZR
+```
+
+Now you can run the command anywhere in you terminal:
+```
+echo-initializr help
+```

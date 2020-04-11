@@ -41,18 +41,18 @@ func createFile(file data.File) {
 			file.Content = fmt.Sprintf(file.Content, namespace)
 		}
 		if file.Name == "main.go" {
-			file.Content = fmt.Sprintf(file.Content, namespace, namespace)
-		}
-		if file.Name == "go.mod" {
 			index := strings.LastIndex(namespace, "/")
-			moduleName := ""
+			minimalistName := ""
 			if index != -1 {
-				moduleName = namespace[index+1:]
+				minimalistName = namespace[index+1:]
 			} else {
-				moduleName = namespace
+				minimalistName = namespace
 			}
 
-			file.Content = fmt.Sprintf(file.Content, moduleName, version)
+			file.Content = fmt.Sprintf(file.Content, namespace, namespace, minimalistName)
+		}
+		if file.Name == "go.mod" {
+			file.Content = fmt.Sprintf(file.Content, namespace, version)
 		}
 	} else {
 		fmt.Println("Could not access or convert sample files interface!")

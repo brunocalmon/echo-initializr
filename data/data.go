@@ -39,7 +39,7 @@ import (
 
 func main() {
 	e := echo.New()
-	g := e.Group("/gomicro/v1")
+	g := e.Group("/%s/v1")
 	g.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
