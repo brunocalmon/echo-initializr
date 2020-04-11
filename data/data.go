@@ -1,13 +1,9 @@
 package data
 
-import "github.com/brunocalmon/echo-initializr/global"
-
 var files Files
 var grave string = "`"
 
-func Initializr() Files {
-	namespace := global.Global["namespace"].(string)
-
+func Initializr(namespace string) Files {
 	createFile(File{Namespace: namespace, Name: "README.md", Content: readme})
 	createFile(File{Namespace: namespace, Name: "main.go", Content: main})
 	createFile(File{Namespace: namespace, Name: "go.mod", Content: gomod})

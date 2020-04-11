@@ -1,10 +1,8 @@
 package data
 
-import "github.com/brunocalmon/echo-initializr/global"
-
 type FileContent interface {
-	Path()
-	PathWithFile()
+	Path(outputDir string)
+	PathWithFile(outputDir string)
 }
 
 type File struct {
@@ -14,13 +12,11 @@ type File struct {
 	Content   string
 }
 
-func (f File) Path() string {
-	var outputDir string = global.Global["outputDir"].(string)
+func (f File) Path(outputDir string) string {
 	return outputDir + "/" + f.Namespace + f.Folder
 }
 
-func (f File) PathWithFile() string {
-	var outputDir string = global.Global["outputDir"].(string)
+func (f File) PathWithFile(outputDir string) string {
 	return outputDir + "/" + f.Namespace + f.Folder + "/" + f.Name
 }
 
