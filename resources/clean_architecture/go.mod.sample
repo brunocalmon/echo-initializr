@@ -1,0 +1,3 @@
+module %s
+
+go %s

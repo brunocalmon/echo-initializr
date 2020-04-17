@@ -1,0 +1,25 @@
+package config
+
+import "os"
+
+var (
+	// Port to be listened by application
+	Port string
+    //ApplicationContext set on the url's context: 'http://localhost:{port}/{context}/{resource}'
+    ApplicationContext string
+    //ApplicationName for displaying
+    ApplicationName string
+)
+
+func getEnv(key, defaultValue string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return defaultValue
+}
+
+func init() {
+	Port = getEnv("PORT", "%d")
+    ApplicationContext = getEnv("APPLICATION_CONTEXT", "/%s/v1")
+    ApplicationName = getEnv("APPLICATION_NAME", "%s")
+}
