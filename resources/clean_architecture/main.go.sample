@@ -1,0 +1,21 @@
+package main
+
+import (
+	"%s/config"
+	"%s/controller"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+)
+
+func main() {
+	e := echo.New()
+	g := e.Group(config.ApplicationContext)
+	g.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
+
+	g.GET("/health", controller.CheckHealth)
+
+	e.Logger.Fatal(e.Start(":" + config.Port))
+}

@@ -22,9 +22,8 @@ var initCmd = &cobra.Command{
 		outputDir, _ := cmd.Flags().GetString("outputDir")
 		dependencies, _ := cmd.Flags().GetString("dependencies")
 		port, _ := cmd.Flags().GetInt("port")
-		files := data.Initializr(namespace)
+		files := data.Initializr(namespace, "clean_architecture")
 
-		logic.CreateFolders(outputDir, files)
 		logic.CreateFiles(namespace, version, outputDir, port, files)
 		installAllDependencies(namespace, outputDir, dependencies)
 
