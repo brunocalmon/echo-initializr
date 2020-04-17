@@ -29,6 +29,25 @@ func createFile(namespace, version, outputDir string, port int, file data.File) 
 		fmt.Println(err)
 		return
 	}
+
+	file = contentPicker(namespace, version, port, file)
+
+	l, err := createdFile.WriteString(file.Content)
+	if err != nil {
+		fmt.Println(err)
+		createdFile.Close()
+		return
+	}
+
+	fmt.Println(l, "written successfully: "+outputDir)
+	err = createdFile.Close()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+}
+
+func contentPicker(namespace, version string, port int, file data.File) data.File {
 	if file.Name == "environment.go" {
 		index := strings.LastIndex(namespace, "/")
 		minimalistName := ""
@@ -49,17 +68,5 @@ func createFile(namespace, version, outputDir string, port int, file data.File) 
 	if file.Name == "go.mod" {
 		file.Content = fmt.Sprintf(file.Content, namespace, version)
 	}
-
-	l, err := createdFile.WriteString(file.Content)
-	if err != nil {
-		fmt.Println(err)
-		createdFile.Close()
-		return
-	}
-	fmt.Println(l, "written successfully: "+outputDir)
-	err = createdFile.Close()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	return file
 }
