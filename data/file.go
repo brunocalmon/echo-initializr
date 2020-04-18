@@ -10,6 +10,7 @@ type File struct {
 	Folder    string
 	Name      string
 	Content   string
+	Keys      []string
 }
 
 func (f File) Path(outputDir string) string {

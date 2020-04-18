@@ -1,4 +1,8 @@
-%s
+header: {
+	"keys": ["namespace"]
+}
+
+{{namespace}}
 =======
 
 This is your project and has the objective of being a skeleton for new micro services projects

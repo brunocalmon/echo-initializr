@@ -9,14 +9,14 @@ import (
 )
 
 //CreateFiles creates files on folders
-func CreateFiles(namespace, version, outputDir string, port int, files data.Files) {
+func CreateFiles(structureData map[string]string, files data.Files) {
 	for _, file := range files {
-		createFile(namespace, version, outputDir, port, file)
+		createFile(structureData, file)
 	}
 }
 
-func createFile(namespace, version, outputDir string, port int, file data.File) {
-	path := file.Path(outputDir)
+func createFile(structureData map[string]string, file data.File) {
+	path := file.Path(structureData["outputDir"])
 	err := os.MkdirAll(path, os.ModePerm)
 	if err != nil {
 		fmt.Printf("Could not create the directory %v\n", err)
@@ -24,13 +24,13 @@ func createFile(namespace, version, outputDir string, port int, file data.File) 
 	}
 	fmt.Println("Folder " + path + " created.")
 
-	createdFile, err := os.Create(file.PathWithFile(outputDir))
+	createdFile, err := os.Create(file.PathWithFile(structureData["outputDir"]))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	file = contentPicker(namespace, version, port, file)
+	file = contentFormater(structureData, file)
 
 	l, err := createdFile.WriteString(file.Content)
 	if err != nil {
@@ -39,7 +39,7 @@ func createFile(namespace, version, outputDir string, port int, file data.File) 
 		return
 	}
 
-	fmt.Println(l, "written successfully: "+outputDir)
+	fmt.Println(l, "written successfully: "+structureData["outputDir"])
 	err = createdFile.Close()
 	if err != nil {
 		fmt.Println(err)
@@ -47,26 +47,23 @@ func createFile(namespace, version, outputDir string, port int, file data.File) 
 	}
 }
 
-func contentPicker(namespace, version string, port int, file data.File) data.File {
-	if file.Name == "environment.go" {
-		index := strings.LastIndex(namespace, "/")
-		minimalistName := ""
-		if index != -1 {
-			minimalistName = namespace[index+1:]
-		} else {
-			minimalistName = namespace
-		}
+func contentFormater(structureData map[string]string, file data.File) data.File {
+	structureData["application_context"] = extractApplicationName(structureData)
+	structureData["application_name"] = extractApplicationName(structureData)
 
-		file.Content = fmt.Sprintf(file.Content, port, minimalistName, minimalistName)
+	for _, keyword := range file.Keys {
+		file.Content = strings.Replace(file.Content, "{{"+keyword+"}}", structureData[keyword], -1)
 	}
-	if file.Name == "README.md" {
-		file.Content = fmt.Sprintf(file.Content, namespace)
-	}
-	if file.Name == "main.go" {
-		file.Content = fmt.Sprintf(file.Content, namespace, namespace)
-	}
-	if file.Name == "go.mod" {
-		file.Content = fmt.Sprintf(file.Content, namespace, version)
-	}
+
 	return file
+}
+
+func extractApplicationName(structureData map[string]string) (applicationName string) {
+	index := strings.LastIndex(structureData["namespace"], "/")
+	if index != -1 {
+		applicationName = structureData["namespace"][index+1:]
+	} else {
+		applicationName = structureData["namespace"]
+	}
+	return applicationName
 }

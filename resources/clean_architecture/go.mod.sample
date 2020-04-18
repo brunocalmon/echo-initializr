@@ -1,3 +1,7 @@
-module %s
+header: {
+	"keys": ["namespace", "version"]
+}
 
-go %s
+module {{namespace}}
+
+go {{version}}

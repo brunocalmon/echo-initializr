@@ -1,3 +1,7 @@
+header: {
+	"keys": ["port", "application_context", "application_name"]
+}
+
 package config
 
 import "os"
@@ -19,7 +23,7 @@ func getEnv(key, defaultValue string) string {
 }
 
 func init() {
-	Port = getEnv("PORT", "%d")
-    ApplicationContext = getEnv("APPLICATION_CONTEXT", "/%s/v1")
-    ApplicationName = getEnv("APPLICATION_NAME", "%s")
+	Port = getEnv("PORT", "{{port}}")
+    ApplicationContext = getEnv("APPLICATION_CONTEXT", "/{{application_context}}/v1")
+    ApplicationName = getEnv("APPLICATION_NAME", "{{application_name}}")
 }
