@@ -10,6 +10,9 @@ import (
 
 //CreateFiles creates files on folders
 func CreateFiles(structureData map[string]string, files data.Files) {
+	structureData["application_context"] = extractApplicationName(structureData)
+	structureData["application_name"] = extractApplicationName(structureData)
+
 	for _, file := range files {
 		createFile(structureData, file)
 	}
@@ -48,9 +51,6 @@ func createFile(structureData map[string]string, file data.File) {
 }
 
 func contentFormater(structureData map[string]string, file data.File) data.File {
-	structureData["application_context"] = extractApplicationName(structureData)
-	structureData["application_name"] = extractApplicationName(structureData)
-
 	for _, keyword := range file.Keys {
 		file.Content = strings.Replace(file.Content, "{{"+keyword+"}}", structureData[keyword], -1)
 	}
